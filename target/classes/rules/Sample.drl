@@ -1,0 +1,22 @@
+package com.sample
+ 
+import com.sample.model.Account;
+import com.sample.model.Reservation;
+import com.sample.model.ReservationResults;
+import com.sample.ReservationHelper;
+import com.sample.model.TCIDGroups;
+import com.sample.model.TravelAgent;
+import com.sample.model.Audit;
+import com.sample.model.utilities.AuditHelper;
+import com.sample.model.RuleType;
+
+rule "Fee PCT"
+dialect "java"
+salience 99
+when
+	$reservation: Reservation(roomType == "1")
+then
+	System.out.println("--> Rule FIRED: " + drools.getRule());
+	//$reservation.getAudit().getEvent().put( RuleType.COMM , AuditHelper.getRuleHash(drools.getRule()));
+	$reservation.getAudit().setRuleID( RuleType.FEE , AuditHelper.getRuleHash(drools.getRule()));
+end
